@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PropertiesAPI.Data;
 using PropertiesAPI.Data.Repositories;
+using PropertiesAPI.Middleware;
 using PropertiesAPI.Models;
 using PropertiesAPI.Services;
 
@@ -31,10 +32,12 @@ namespace PropertiesAPI
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-            // Configure the HTTP request pipeline.
+            
+            app.UseTiming();
+
+            app.UseErrorHandling();
 
             app.UseHttpsRedirection();
-
 
             app.MapSwagger().RequireAuthorization();
 
@@ -48,17 +51,22 @@ namespace PropertiesAPI
     }
 }
 
-//Exercício aula 1
+//app.Use(async (context, next) =>
+//{
+//    // executado na ida
+//    var start = DateTime.UtcNow;
 
-//Construa uma Api Web que gerencie uma lista de imóveis em memória e que contenha as seguintes rotas:
+//    // chamou o proximo
+//    await next.Invoke(context);
 
+//    //executado na volta
+//    app.Logger.LogInformation($"Request {context.Request.Path}: {(DateTime.UtcNow - start).TotalMilliseconds}ms");
+//});
 
-//Criar requests no postman ou qualquer outra ferramenta para testes da api.
-
-//Disponibilizar através de repósitorio no github.
-
-//Extra
-
-//- Utilizar Controllers
-//- Incluir rotas para atualizar e remover imóveis.
-//- Incluir Documentação OpenAPI com Swagger.
+//// Esse middleware vai encerrar o request (Terminating Middleware)
+//// Não chama o próximo
+//app.Use((HttpContext context, Func<Task> next) =>
+//{
+//    app.Logger.LogInformation("Terminating the Request");
+//    return Task.CompletedTask;
+//});
