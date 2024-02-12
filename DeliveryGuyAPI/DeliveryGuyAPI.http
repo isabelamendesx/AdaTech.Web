@@ -1,0 +1,6 @@
+@DeliveryGuyAPI_HostAddress = http://localhost:5056
+
+GET {{DeliveryGuyAPI_HostAddress}}/deliveryguy/
+Accept: application/json
+
+###
